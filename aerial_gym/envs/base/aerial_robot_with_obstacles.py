@@ -39,7 +39,7 @@ class AerialRobotWithObstacles(BaseTask):
         self.cfg.env.enable_onboard_cameras = True
 
         self.max_episode_length = int(self.cfg.env.episode_length_s / self.cfg.sim.dt)
-        self.debug_viz = False
+        self.debug_viz = True
 
         self.sim_params = sim_params
         self.physics_engine = physics_engine
@@ -285,6 +285,17 @@ class AerialRobotWithObstacles(BaseTask):
         self.check_collisions()
         self.compute_observations()
         self.compute_reward()
+
+        # Save depth image to file
+        if self.debug_viz:
+            if self.counter % 250 == 0:
+                print("self.counter:", self.counter)
+                print("Saving depth image")
+                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_DEPTH, "depth_image_"+str(self.counter)+".png")
+                print("Saving segmentation image")
+                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_SEGMENTATION, "segmentation_image_"+str(self.counter)+".png")
+                print("Saving rgb image")
+                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR, "rgb_image_"+str(self.counter)+".png")
 
         if self.cfg.env.reset_on_collision:
             ones = torch.ones_like(self.reset_buf)
