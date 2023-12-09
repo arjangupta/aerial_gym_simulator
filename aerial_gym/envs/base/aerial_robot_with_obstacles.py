@@ -31,6 +31,12 @@ class AerialRobotWithObstacles(BaseTask):
 
     def __init__(self, cfg: AerialRobotWithObstaclesCfg, sim_params, physics_engine, sim_device, headless):
         self.cfg = cfg
+        
+        # Override num envs to 1
+        self.cfg.env.num_envs = 1
+
+        # Switch on cameras
+        self.cfg.env.enable_onboard_cameras = True
 
         self.max_episode_length = int(self.cfg.env.episode_length_s / self.cfg.sim.dt)
         self.debug_viz = False
