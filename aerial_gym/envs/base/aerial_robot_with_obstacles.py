@@ -376,6 +376,10 @@ class AerialRobotWithObstacles(BaseTask):
         self.torques[:, 0] = output_torques_inertia_normalized
         self.forces = torch.where(self.forces < 0, torch.zeros_like(self.forces), self.forces)
 
+        # Add random forces to robot body
+        self.forces[:, 0, 0] += torch.rand((self.num_envs,), device=self.device)*10
+        self.forces[:, 0, 1] += torch.rand((self.num_envs,), device=self.device)*10
+
         # apply actions
         self.gym.apply_rigid_body_force_tensors(self.sim, gymtorch.unwrap_tensor(
             self.forces), gymtorch.unwrap_tensor(self.torques), gymapi.LOCAL_SPACE)
