@@ -287,15 +287,22 @@ class AerialRobotWithObstacles(BaseTask):
         self.compute_reward()
 
         # Save depth image to file
-        if self.debug_viz:
-            if self.counter % 250 == 0:
-                print("self.counter:", self.counter)
-                print("Saving depth image")
-                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_DEPTH, "depth_image_"+str(self.counter)+".png")
-                print("Saving segmentation image")
-                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_SEGMENTATION, "segmentation_image_"+str(self.counter)+".png")
-                print("Saving rgb image")
-                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR, "rgb_image_"+str(self.counter)+".png")
+        # if self.debug_viz:
+        #     if self.counter % 250 == 0:
+        #         print("self.counter:", self.counter)
+        #         print("Saving depth image")
+        #         self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_DEPTH, "depth_image_"+str(self.counter)+".png")
+        #         print("Saving segmentation image")
+        #         self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_SEGMENTATION, "segmentation_image_"+str(self.counter)+".png")
+        #         print("Saving rgb image")
+        #         self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR, "rgb_image_"+str(self.counter)+".png")
+        
+        # Store depth image in a buffer
+        # self.depth_image_buf = torch.zeros((self.num_envs, 270, 480), device=self.device)
+        # if self.enable_onboard_cameras:
+        #     depth_image = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_DEPTH)
+        #     self.depth_image_buf[0] = torch.from_numpy(depth_image)
+            
 
         if self.cfg.env.reset_on_collision:
             ones = torch.ones_like(self.reset_buf)
